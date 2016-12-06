@@ -6,7 +6,7 @@ const Route = require('./Route');
 class GA {
 
 	/* GA parameters */
-	static get mutationRate() { return 0.015; }
+	static get mutationRate() { return 0.010; }
 	static get tournamentSize() { return 5; }
 	static get elitism() { return true; }
 
@@ -29,8 +29,8 @@ class GA {
 		// Loop over the new population's size and create individuals from current population
 		for (let i = elitismOffset; i < newPopulation.populationSize(); i++) {
 			// Select parents
-			let parent1 = GA.tournamentSelection(pop);
-			let parent2 = GA.tournamentSelection(pop);
+			let parent1 = GA.rouletteSelection(pop);
+			let parent2 = GA.rouletteSelection(pop);
 			// Crossover parents
 			let child = GA.crossover(parent1, parent2);
 			// Add child to new population
@@ -130,6 +130,29 @@ class GA {
 		// Get the fittest route
 		let fittest = tournament.getFittest();
 		return fittest;
+	}
+
+	// Selects candidate route for crossover
+	/**
+	 * @param {Population} pop
+	 * @returns {Route}
+	 */
+	static rouletteSelection(pop) {
+		let sumOfFitness = 0;
+
+		for (let i=0; i < pop.populationSize(); i++)
+			sumOfFitness += pop.getRoute(i).getFitness();
+
+		let rouletteNumber = Math.random() * sumOfFitness;
+		
+		let winnerSum = 0;
+		for (let i=0; i<pop.populationSize(); i++) {
+			winnerSum += pop.getRoute(i).getFitness();
+			if (winnerSum > rouletteNumber) {
+				return pop.getRoute(i);
+			}
+		}
+		throw `Can't find candidate in the roullete: winnerSum: ${winnerSum}, sumOfFitness: ${sumOfFitness}, rouletteNumber: ${rouletteNumber}`;
 	}
 }
 

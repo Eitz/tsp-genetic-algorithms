@@ -22,6 +22,7 @@ class Population {
 	// Saves a route
 	saveRoute(index, route) {
 		this.routes[index] = route;
+ 		// this.routes.sort((a, b) => b.getFitness() - a.getFitness() );
 	}
 
 	// Gets a route from population
