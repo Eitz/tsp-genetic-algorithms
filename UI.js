@@ -7,6 +7,7 @@ let iterations = 0;
 
 let canvas;
 let lastRouteDistance;
+let iterationsWithoutImprovement = 0;
 
 class UI {
 	static init() {
@@ -21,6 +22,7 @@ class UI {
 			if (intervalID)
 				clearInterval(intervalID);
 			iterations = 0;
+			iterationsWithoutImprovement = 0;
 			App.reset();
 			canvas.getContext("2d").clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 			document.getElementById('distance-start').innerHTML = '?';
@@ -30,33 +32,64 @@ class UI {
 			document.getElementById('add-5-point').disabled = false;
 			document.getElementById('add-point').disabled = false;
 			document.getElementById('start').disabled = true;
+			document.getElementById('start-limited').disabled = true;
+			document.getElementById('stop').disabled = true;
 		}
 
 		document.getElementById('add-5-point').onclick = function (ev) {
 			for (let i = 0; i < 5; i++)
 				UI.addPoint();
 			document.getElementById('start').disabled = false;
+			document.getElementById('start-limited').disabled = false;
 		}
 
 		document.getElementById('add-point').onclick = function (ev) {
 			UI.addPoint();
 			document.getElementById('start').disabled = false;
+			document.getElementById('start-limited').disabled = false;
 		}
 
 		document.getElementById('start').onclick = function (ev) {
 			document.getElementById('add-5-point').disabled = true;
 			document.getElementById('add-point').disabled = true;
-			console.log("start");
+			document.getElementById('start').disabled = true;
+			document.getElementById('start-limited').disabled = true;
+			document.getElementById('stop').disabled = false;
 			if (iterations == 0)
 				console.log(App.initAlgorithm());
 			intervalID = setInterval(function() {
 				iterations++;
 				UI.draw(App.iterateAlgorithm(), iterations);
+			}, 30);
+		}
+
+		document.getElementById('start-limited').onclick = function (ev) {
+			document.getElementById('add-5-point').disabled = true;
+			document.getElementById('add-point').disabled = true;
+			document.getElementById('start').disabled = true;
+			document.getElementById('start-limited').disabled = true;
+			document.getElementById('stop').disabled = false;
+			if (iterations == 0)
+				console.log(App.initAlgorithm());
+			intervalID = setInterval(function() {
+				iterations++;
+				let result = App.iterateAlgorithm(); 
+				if (Number(result.route.getDistance().toFixed(3)) == lastRouteDistance) {
+					iterationsWithoutImprovement++;
+				} else {
+					iterationsWithoutImprovement = 0;
+				}
+				UI.draw(result, iterations);
+				if (iterationsWithoutImprovement >= 300 || iterations >= 1000) {
+					clearInterval(intervalID);
+					document.getElementById('start').disabled = false;
+				}
 			}, 10);
 		}
 
 		document.getElementById('stop').onclick = function (ev) {
 			console.log("stop"); 
+			document.getElementById('start').disabled = false;
 			if (intervalID)
 				clearInterval(intervalID)
 		}
@@ -71,7 +104,7 @@ class UI {
 	}
 
 	static draw(result, iterations) {
-		if (result.route.getDistance() != lastRouteDistance) {
+		if (result.route.getDistance().toFixed(3) != lastRouteDistance) {
 			let ctx = canvas.getContext('2d');
 			ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 			for (let i = 0; i < result.route.routeSize(); i++) {
@@ -91,11 +124,11 @@ class UI {
 			}	
 		}
 		if (iterations == 1)
-			document.getElementById('distance-start').innerHTML = result.route.getDistance();
+			document.getElementById('distance-start').innerHTML = result.route.getDistance().toFixed(3)
 		else 
-			document.getElementById('distance-best').innerHTML = result.route.getDistance();
+			document.getElementById('distance-best').innerHTML = result.route.getDistance().toFixed(3)
 		document.getElementById('iteration').innerHTML = iterations;
-		lastRouteDistance = result.route;
+		lastRouteDistance = Number(result.route.getDistance().toFixed(3));
 	}
 }
 
