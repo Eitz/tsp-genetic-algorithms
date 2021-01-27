@@ -10,8 +10,8 @@ const Point = require('./Point');
 class App {
 
 	static reset() {
-		points = [];
-		population = [];
+		App.points = [];
+		App.population = [];
 	}
 
 	static addPoint(x, y) {
@@ -24,12 +24,12 @@ class App {
 		for (let p of App.points) {
 			RouteManager.addCity(new City(p.x, p.y));
 		}
-		App.population = new Population(points.length * 2, true);
+		App.population = new Population(App.points.length * 2, true);
 	}
 
 	static iterateAlgorithm() {
-		App.population = GA.evolvePopulation(population);
-		const fittest = population.getFittest();
+		App.population = GA.evolvePopulation(App.population);
+		const fittest = App.population.getFittest();
 		return { route: fittest, distance: fittest.getDistance(), numberOfCities: RouteManager.numberOfCities() };
 	}
 }
