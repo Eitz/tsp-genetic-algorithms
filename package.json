@@ -1,0 +1,28 @@
+{
+  "name": "tsp-genetic-algorithms",
+  "version": "1.0.0",
+  "description": "Travel salesman problem solved with genetic algorithms.",
+  "main": "bundle.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "build": "npx webpack --entry ./UI.js --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eitz/tsp-genetic-algorithms.git"
+  },
+  "author": "Richard W. Eitz (2016)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Eitz/tsp-genetic-algorithms/issues"
+  },
+  "homepage": "https://github.com/Eitz/tsp-genetic-algorithms#readme",
+  "dependencies": {
+    "webpack": "^5.18.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^4.4.0"
+  }
+}

@@ -1,24 +1,28 @@
 <!doctype HTML>
 <html>
+
 <body>
-		<div>
-			<button id="reset">reset</button>
-			<button id="add-point">add-point</button>
-			<button id="add-5-point">add-5-point</button>
-			<button id="start">start</button>
-			<button id="start-limited">start (limited*)</button>
-			<button id="stop" disabled>stop</button>
-		</div>
-		<p>* 1000 generations or 300 without improvement</p>
-		<p>
-				There are <span id="cities">0</span> cities. The current iteration is: <span id="iteration">0</span>.
-		</p>
-		<p> The starting distance was <span id="distance-start">?</span> and the best result so far is: <span id="distance-best">?</span>
+	<div>
+		<button id="reset">reset</button>
+		<button id="add-point">add-point</button>
+		<button id="add-5-point">add-5-point</button>
+		<button id="start">start</button>
+		<button id="start-limited">start (limited*)</button>
+		<button id="stop" disabled>stop</button>
+	</div>
+	<p>* 1000 generations or 300 without improvement</p>
+	<p>
+		There are <span id="cities">0</span> cities.
+		The current iteration is: <span id="iteration">0</span>.
+	</p>
+	<p>
+		The starting distance was <span id="distance-start">?</span> and the best result so far is:
+		<span id="distance-best">?</span>
+	<div>
+		<canvas width="400" height="400">Your browser doesn't support canvas!</canvas>
+	</div>
 
-		<div>
-			<canvas width="400" height="400">Your browser doesn't support canvas!</canvas>
-		</div>
-
-		<script src="bundle.js"></script>
+	<script src="dist/main.js"></script>
 </body>
+
 </html>

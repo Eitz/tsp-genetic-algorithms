@@ -3,12 +3,16 @@
 const Population = require('./Population');
 const Route = require('./Route');
 
+const MUTATION_RATE = 0.05;
+const TOURNAMENT_SIZE = 5;
+const USE_ELITISM = true;
+
 class GA {
 
 	/* GA parameters */
-	static get mutationRate() { return 0.010; }
-	static get tournamentSize() { return 5; }
-	static get elitism() { return true; }
+	static get mutationRate() { return MUTATION_RATE; }
+	static get tournamentSize() { return TOURNAMENT_SIZE; }
+	static get elitism() { return USE_ELITISM; }
 
 	/**
 	 * Evolves a population over one generation
@@ -140,13 +144,13 @@ class GA {
 	static rouletteSelection(pop) {
 		let sumOfFitness = 0;
 
-		for (let i=0; i < pop.populationSize(); i++)
+		for (let i = 0; i < pop.populationSize(); i++)
 			sumOfFitness += pop.getRoute(i).getFitness();
 
 		let rouletteNumber = Math.random() * sumOfFitness;
-		
+
 		let winnerSum = 0;
-		for (let i=0; i<pop.populationSize(); i++) {
+		for (let i = 0; i < pop.populationSize(); i++) {
 			winnerSum += pop.getRoute(i).getFitness();
 			if (winnerSum > rouletteNumber) {
 				return pop.getRoute(i);
